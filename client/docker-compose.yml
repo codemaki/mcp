@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  mcp-client:
+    build: .
+    container_name: mcp-client
+    environment:
+      - PYTHONUNBUFFERED=1
+    # 호스트의 localhost:8000에 접근하기 위한 네트워크 설정
+    network_mode: "host"
+    # 볼륨 마운트 (개발 시 코드 변경사항 반영용)
+    volumes:
+      - .:/app
