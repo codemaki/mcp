@@ -205,3 +205,19 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# macOS
+# macOS 자동 생성 파일
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# 썸네일 캐시
+._*
+
+# 휴지통
+.Trashes
+
+# Spotlight 검색 인덱스
+.Spotlight-V100
+
