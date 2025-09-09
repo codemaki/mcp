@@ -1,0 +1,10 @@
+services:
+  image-converter-mcp-server:
+    build: .
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./image_converter_mcp_server.py:/app/image_converter_mcp_server.py
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
