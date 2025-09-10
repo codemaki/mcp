@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  mcp-server:
+    build: .
+    ports:
+      - "11001:11001"
+    volumes:
+      - ./brave_search_mcp_server.py:/app/brave_search_mcp_server.py
+    environment:
+      - PYTHONUNBUFFERED=1
+      - BRAVE_API_KEY=${BRAVE_API_KEY}
+    restart: unless-stopped
