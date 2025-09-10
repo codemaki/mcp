@@ -61,21 +61,107 @@ python brave_search_mcp_server.py
 
 ## Docker 실행
 
-### 1. Docker 이미지 빌드
+### 빠른 배포 (권장)
 ```bash
-docker build -t mcp-server .
+# 1. 환경변수 설정
+export BRAVE_API_KEY="your_api_key_here"
+
+# 2. 배포 스크립트 실행
+./deploy.sh
 ```
 
-### 2. Docker 컨테이너 실행
+### 수동 Docker Compose 실행
 ```bash
-docker run -p 8000:8000 mcp-server
+# 1. 환경변수 설정
+export BRAVE_API_KEY="your_api_key_here"
+
+# 2. 서비스 시작
+docker-compose up --build -d
+
+# 3. 상태 확인
+docker-compose ps
+
+# 4. 로그 확인
+docker-compose logs -f mcp-server
 ```
 
-### 3. Docker Compose 사용 (권장)
+### 서버 상태 확인
 ```bash
-# .env 파일에 API 키 설정 후 실행
-docker-compose up --build
+# 로컬 테스트
+./test_connection.sh
+
+# 원격 서버 테스트
+./test_connection.sh 10.10.10.201 11001
 ```
+
+## 원격 서버 배포
+
+### 1. 서버 준비
+```bash
+# 우분투 서버에 접속
+ssh user@10.10.10.201
+
+# Docker 및 Docker Compose 설치 (필요한 경우)
+sudo apt update
+sudo apt install docker.io docker-compose-plugin
+
+# 프로젝트 클론 또는 파일 업로드
+git clone <your-repo-url>
+# 또는
+scp -r . user@10.10.10.201:/path/to/project/
+```
+
+### 2. 서버에서 배포
+```bash
+# 프로젝트 디렉토리로 이동
+cd /path/to/brave_search_mcp_server
+
+# 환경변수 설정
+export BRAVE_API_KEY="your_api_key_here"
+
+# 배포 실행
+./deploy.sh
+```
+
+### 3. 방화벽 설정 (필요한 경우)
+```bash
+# UFW 사용 시
+sudo ufw allow 11001
+
+# 또는 iptables 사용 시
+sudo iptables -A INPUT -p tcp --dport 11001 -j ACCEPT
+```
+
+### 4. 연결 테스트
+```bash
+# 다른 서버에서 테스트
+curl http://10.10.10.201:11001/
+curl http://10.10.10.201:11001/health
+```
+
+## 문제 해결
+
+### 1. 404 Not Found 오류
+- **원인**: MCP 서버는 `/` 경로에서 404를 반환하는 것이 정상입니다.
+- **해결**: `/` 또는 `/health` 엔드포인트를 사용하여 서버 상태를 확인하세요.
+
+### 2. 연결 거부 오류
+- **원인**: 포트가 열려있지 않거나 서버가 실행되지 않음
+- **해결**: 
+  ```bash
+  # 서버 상태 확인
+  docker-compose ps
+  
+  # 포트 확인
+  netstat -tlnp | grep 11001
+  
+  # 방화벽 확인
+  sudo ufw status
+  ```
+
+### 3. MCP 연결 실패
+- **원인**: Postman에서 잘못된 엔드포인트 사용
+- **해결**: MCP 연결 시 `http://10.10.10.201:11001/mcp` 엔드포인트를 사용하세요.
 
 ## 사용법
 

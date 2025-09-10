@@ -4,10 +4,16 @@ services:
   mcp-server:
     build: .
     ports:
-      - "11001:11001"
+      - "0.0.0.0:11001:11001"  # 모든 인터페이스에서 접근 가능하도록 명시
     volumes:
       - ./brave_search_mcp_server.py:/app/brave_search_mcp_server.py
     environment:
       - PYTHONUNBUFFERED=1
       - BRAVE_API_KEY=${BRAVE_API_KEY}
     restart: unless-stopped
+    networks:
+      - mcp-network
+
+networks:
+  mcp-network:
+    driver: bridge

@@ -2,9 +2,40 @@ from mcp.server.fastmcp import FastMCP
 import requests
 import os
 from typing import Dict, List, Any
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 
 # ① FastMCP 인스턴스를 생성
 mcp = FastMCP("Brave Search MCP Server", host="0.0.0.0", port=11001)
+
+# FastAPI 앱 인스턴스에 접근하여 추가 엔드포인트 정의
+app = mcp.app
+
+# 헬스체크 엔드포인트 추가
+@app.get("/")
+async def health_check():
+    """서버 상태를 확인하는 헬스체크 엔드포인트"""
+    return JSONResponse({
+        "status": "healthy",
+        "service": "Brave Search MCP Server",
+        "version": "1.0.0",
+        "endpoints": {
+            "health": "/",
+            "mcp": "/mcp"
+        }
+    })
+
+@app.get("/health")
+async def detailed_health():
+    """상세한 서버 상태 정보를 제공하는 엔드포인트"""
+    return JSONResponse({
+        "status": "healthy",
+        "service": "Brave Search MCP Server",
+        "version": "1.0.0",
+        "brave_api_configured": bool(BRAVE_API_KEY),
+        "available_tools": ["hello", "get_prompt", "brave_search"],
+        "available_resources": ["simple://info"]
+    })
 
 # Brave Search API 설정
 BRAVE_API_KEY = os.getenv("BRAVE_API_KEY")
