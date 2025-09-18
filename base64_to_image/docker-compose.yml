@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  base64-to-image:
+    build: .
+    ports:
+      - "7001:7001"
+    volumes:
+      - ./uploads:/app/uploads
+    restart: unless-stopped
+    container_name: base64-app
+    environment:
+      - FLASK_ENV=production

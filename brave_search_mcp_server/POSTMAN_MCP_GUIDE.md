@@ -2,23 +2,31 @@
 
 ## 문제 해결: EHOSTUNREACH 오류
 
-### 현재 상황
+### 진단 완료 - 서버 측 정상 확인 ✅
 - ✅ 서버(10.10.10.201:11001)가 정상 작동 중
-- ✅ 네트워크 연결 정상
-- ❌ Postman에서 `EHOSTUNREACH` 오류 발생
+- ✅ Docker 컨테이너 정상 실행 (포트 0.0.0.0:11001 바인딩)
+- ✅ 로컬에서 MCP 요청 성공 (HTTP 200)
+- ✅ 공인 IP: 180.68.82.159
+- ❌ Postman에서만 연결 실패 → **클라이언트 측 문제**
 
 ### 해결 방법
 
-#### 1. Postman 설정 확인
+#### 1. 🚨 Postman 설정 확인 (가장 중요!)
 
-**Proxy 설정 확인:**
-1. Postman → Settings → Proxy
-2. "Use the system proxy" 체크 해제
-3. "Add a custom proxy configuration" 체크 해제
+**A. Proxy 설정 확인:**
+1. Postman → Settings (⚙️) → Proxy
+2. ❌ "Use the system proxy" 체크 **해제**
+3. ❌ "Add a custom proxy configuration" 체크 **해제**
+4. 모든 proxy 관련 설정을 **비활성화**
 
-**SSL 설정 확인:**
-1. Postman → Settings → General
-2. "SSL certificate verification" OFF로 설정 (테스트용)
+**B. SSL 설정 확인:**
+1. Postman → Settings (⚙️) → General
+2. ❌ "SSL certificate verification" **OFF**로 설정
+
+**C. 네트워크 설정 확인:**
+1. Postman → Settings (⚙️) → General
+2. "Request timeout" → 30000ms (30초)로 설정
+3. "Max response size" → 50MB로 설정
 
 #### 2. Postman 요청 설정
 
@@ -48,25 +56,34 @@ Accept: application/json, text/event-stream
 }
 ```
 
-#### 3. 네트워크 진단
+#### 3. 🔍 네트워크 진단 (로컬 PC에서 실행)
 
-**Postman이 실행되는 환경에서 테스트:**
+**중요: Postman이 실행되는 로컬 PC에서 다음 명령어들을 실행하세요:**
+
 ```bash
-# 1. 네트워크 연결 확인
+# 1. 서버 연결 확인
 ping 10.10.10.201
 
-# 2. 포트 연결 확인
+# 2. 포트 연결 확인 (Windows의 경우 telnet 대신 PowerShell 사용)
+# macOS/Linux:
 telnet 10.10.10.201 11001
+# Windows PowerShell:
+Test-NetConnection 10.10.10.201 -Port 11001
 
-# 3. HTTP 요청 테스트
+# 3. HTTP 기본 요청 테스트
 curl -v http://10.10.10.201:11001/
 
-# 4. MCP 요청 테스트
+# 4. MCP 요청 테스트 (서버에서 성공한 것과 동일)
 curl -X POST http://10.10.10.201:11001/mcp \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json, text/event-stream' \
   -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"test-client","version":"1.0.0"}}}'
 ```
+
+**예상 결과:**
+- ping: 응답 시간 표시
+- telnet/Test-NetConnection: "Connected" 또는 연결 성공 메시지
+- curl MCP 요청: HTTP 200과 함께 초기화 응답 JSON
 
 #### 4. 대안 방법
 
@@ -171,14 +188,21 @@ curl -X POST http://10.10.10.201:11001/mcp \
 }
 ```
 
-#### 7. 문제 해결 체크리스트
+#### 7. 🎯 문제 해결 체크리스트 (순서대로 실행)
 
-- [ ] Postman Proxy 설정 확인
-- [ ] SSL 인증서 검증 비활성화
-- [ ] 네트워크 연결 테스트 (ping, telnet)
-- [ ] curl로 동일한 요청 테스트
-- [ ] Postman 재시작
-- [ ] 다른 API 클라이언트 시도 (Insomnia, Thunder Client)
+**서버 측 (완료됨 ✅):**
+- [x] Docker 컨테이너 정상 실행
+- [x] 포트 11001 바인딩 확인
+- [x] 로컬에서 MCP 요청 성공
+
+**클라이언트 측 (확인 필요):**
+- [ ] **1순위: Postman Proxy 설정 완전 비활성화**
+- [ ] **2순위: SSL 인증서 검증 비활성화** 
+- [ ] **3순위: 로컬 PC에서 네트워크 연결 테스트** (ping, telnet)
+- [ ] **4순위: 로컬 PC에서 curl로 MCP 요청 테스트**
+- [ ] 5순위: Postman 완전 재시작 (앱 종료 후 재실행)
+- [ ] 6순위: 다른 API 클라이언트 시도 (Insomnia, Thunder Client)
+- [ ] 7순위: 방화벽/보안 소프트웨어 확인
 
 #### 8. 로그 확인
 
