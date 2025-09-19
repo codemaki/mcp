@@ -1,0 +1,17 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "helloworld-server"
+version = "0.1.0"
+description = "Simple HelloWorld MCP Server"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "langchain-mcp-adapters>=0.1.9",
+    "paramiko>=3.4.0",
+]
+
+[project.scripts]
+helloworld-server = "example_server:main"
