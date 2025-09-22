@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  gmail-mcp-server:
+    build: .
+    ports:
+      - "11010:11010"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=11010
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
