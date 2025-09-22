@@ -29,7 +29,7 @@ EXPOSE 11005
 
 # 헬스체크 추가
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD uv run python -c "import httpx; httpx.get('http://localhost:11005/health', timeout=5)" || exit 1
+    CMD uv run python -c "import httpx; httpx.get('http://localhost:11005/mcp', timeout=5)" || exit 1
 
 # 애플리케이션 실행
 CMD ["uv", "run", "python", "duckduckgo_mcp_server.py"]

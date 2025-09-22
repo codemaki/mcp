@@ -1,12 +1,11 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "duckduckgo-mcp-server"
 version = "0.1.0"
 description = "AI Agent에서 DuckDuckGo 검색 기능을 사용할 수 있도록 하는 MCP (Model Context Protocol) 서버"
-readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "MIT"}
 authors = [
@@ -52,6 +51,9 @@ Issues = "https://github.com/example/duckduckgo-mcp-server/issues"
 
 [project.scripts]
 duckduckgo-mcp-server = "duckduckgo_mcp_server:main"
+
+[tool.setuptools]
+py-modules = ["duckduckgo_mcp_server"]
 
 [tool.uv]
 dev-dependencies = [
