@@ -8,21 +8,21 @@
 docker build -t gmail-mcp-server .
 
 # 컨테이너 실행
-docker run -d -p 11010:11010 --name gmail-mcp-server gmail-mcp-server
+docker run -d -p 11011:11011 --name gmail-mcp-server gmail-mcp-server
 
 # 또는 docker-compose 사용
 docker-compose up -d
 ```
 
 ### 2. 배포 주소
-- **서버 URL**: `https://skax.app:11010`
-- **MCP 엔드포인트**: `https://skax.app:11010/mcp`
+- **서버 URL**: `http://skax.app:11011`
+- **MCP 엔드포인트**: `http://skax.app:11011/mcp`
 
 ### 3. Google Cloud Console 설정
 
 OAuth 2.0 클라이언트 ID 설정에서 "승인된 리디렉션 URI"에 추가:
 ```
-https://skax.app:11010/oauth/callback
+http://skax.app:11011/oauth/callback
 ```
 
 ### 4. 사용법
@@ -72,16 +72,16 @@ https://skax.app:11010/oauth/callback
 
 ### 5. 환경변수
 - `HOST`: 바인드 호스트 (기본값: 0.0.0.0)
-- `PORT`: 포트 번호 (기본값: 11010)
+- `PORT`: 포트 번호 (기본값: 11011)
 
 ### 6. 도메인 요구사항
-- HTTPS 지원 필요
-- 포트 11010 오픈
+- HTTP 지원
+- 포트 11011 오픈
 - 도메인: skax.app
 
 ### 7. 배포 확인
 ```bash
-curl https://skax.app:11010/mcp
+curl http://skax.app:11011/mcp
 ```
 
 정상 배포시 MCP 서버 응답을 받을 수 있습니다.

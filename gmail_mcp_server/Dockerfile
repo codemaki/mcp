@@ -21,11 +21,11 @@ COPY gmail_mcp_server.py ./
 RUN uv sync
 
 # 포트 노출 (MCP 서버가 사용할 포트)
-EXPOSE 11010
+EXPOSE 11011
 
 # 환경변수 설정
 ENV HOST=0.0.0.0
-ENV PORT=11010
+ENV PORT=11011
 
 # 서버 실행
 CMD ["uv", "run", "gmail_mcp_server.py"]

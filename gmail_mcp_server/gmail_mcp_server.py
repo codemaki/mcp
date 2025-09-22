@@ -17,8 +17,8 @@ SCOPES = ['https://www.googleapis.com/auth/gmail.readonly',
 
 import os
 
-# 환경변수에서 포트 가져오기 (기본값: 11010)
-port = int(os.getenv("PORT", 11010))
+# 환경변수에서 포트 가져오기 (기본값: 11011)
+port = int(os.getenv("PORT", 11011))
 host = os.getenv("HOST", "0.0.0.0")
 
 mcp = FastMCP("Gmail MCP Server", host=host, port=port)
@@ -188,7 +188,7 @@ def gmail_authenticate_with_refresh_token(refresh_token: str, client_id: str, cl
         return f"Gmail 인증 실패: {str(e)}"
 
 @mcp.tool()
-def get_refresh_token_from_auth_code(auth_code: str, client_id: str, client_secret: str, redirect_uri: str = "https://skax.app:11010/oauth/callback") -> str:
+def get_refresh_token_from_auth_code(auth_code: str, client_id: str, client_secret: str, redirect_uri: str = "http://skax.app:11011/oauth/callback") -> str:
     """OAuth 인증 코드를 사용하여 Refresh Token을 발급받습니다.
 
     Args:
@@ -235,7 +235,7 @@ Expires In: {token_data.get('expires_in', 'N/A')} seconds
         return f"토큰 발급 실패: {str(e)}"
 
 @mcp.tool()
-def get_oauth_url_for_refresh_token(client_id: str, redirect_uri: str = "https://skax.app:11010/oauth/callback") -> str:
+def get_oauth_url_for_refresh_token(client_id: str, redirect_uri: str = "http://skax.app:11011/oauth/callback") -> str:
     """Refresh Token 발급을 위한 OAuth URL을 생성합니다.
 
     Args:
