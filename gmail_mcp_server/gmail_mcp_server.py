@@ -21,6 +21,9 @@ import os
 port = int(os.getenv("PORT", 11011))
 host = os.getenv("HOST", "0.0.0.0")
 
+# 기본 리다이렉트 URI (환경변수로 오버라이드 가능)
+DEFAULT_REDIRECT_URI = os.getenv("OAUTH_REDIRECT_URI", "https://skax.app/oauth/callback")
+
 mcp = FastMCP("Gmail MCP Server", host=host, port=port)
 
 class GmailService:
@@ -188,7 +191,7 @@ def gmail_authenticate_with_refresh_token(refresh_token: str, client_id: str, cl
         return f"Gmail 인증 실패: {str(e)}"
 
 @mcp.tool()
-def get_refresh_token_from_auth_code(auth_code: str, client_id: str, client_secret: str, redirect_uri: str = "http://skax.app:11011/oauth/callback") -> str:
+def get_refresh_token_from_auth_code(auth_code: str, client_id: str, client_secret: str, redirect_uri: str = None) -> str:
     """OAuth 인증 코드를 사용하여 Refresh Token을 발급받습니다.
 
     Args:
@@ -199,6 +202,10 @@ def get_refresh_token_from_auth_code(auth_code: str, client_id: str, client_secr
     """
     try:
         import requests
+
+        # redirect_uri가 제공되지 않으면 환경변수 사용
+        if redirect_uri is None:
+            redirect_uri = DEFAULT_REDIRECT_URI
 
         token_url = "https://oauth2.googleapis.com/token"
 
@@ -235,7 +242,7 @@ Expires In: {token_data.get('expires_in', 'N/A')} seconds
         return f"토큰 발급 실패: {str(e)}"
 
 @mcp.tool()
-def get_oauth_url_for_refresh_token(client_id: str, redirect_uri: str = "http://skax.app:11011/oauth/callback") -> str:
+def get_oauth_url_for_refresh_token(client_id: str, redirect_uri: str = None) -> str:
     """Refresh Token 발급을 위한 OAuth URL을 생성합니다.
 
     Args:
@@ -244,6 +251,10 @@ def get_oauth_url_for_refresh_token(client_id: str, redirect_uri: str = "http://
     """
     try:
         import urllib.parse
+
+        # redirect_uri가 제공되지 않으면 환경변수 사용
+        if redirect_uri is None:
+            redirect_uri = DEFAULT_REDIRECT_URI
 
         scopes = ' '.join(SCOPES)
 
