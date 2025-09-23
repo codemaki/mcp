@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  mcp-finance-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mcp-finance-server
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app/src
+      - PYTHONUNBUFFERED=1
+    # Mount for persistent data if needed
+    volumes:
+      - ./logs:/app/logs
+    # Health check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
