@@ -4,6 +4,7 @@ services:
   mcp_skb_content_search:
     build: .
     image: mcp_skb_content_search
+    container_name: mcp_skb_content_search
     ports:
       - "8005:8005"
     environment:
