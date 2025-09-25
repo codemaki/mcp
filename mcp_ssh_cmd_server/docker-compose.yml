@@ -1,6 +1,8 @@
 services:
-  helloworld-server:
+  mcp_ssh_cmd_server:
     build: .
+    container_name: mcp_ssh_cmd_server
+    image: mcp_ssh_cmd_server
     ports:
       - "11010:11010"
     restart: unless-stopped
