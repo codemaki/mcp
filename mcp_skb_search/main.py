@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 from fastmcp import FastMCP
 
 # Initialize MCP server
-mcp = FastMCP("mcp-skb-search")
+mcp = FastMCP("mcp-skb-content-search")
 
 # HTTP client for making requests
 client = httpx.AsyncClient()
@@ -362,7 +362,7 @@ async def find_exact_content(exact_title: str) -> str:
 
 def main():
     """Run the MCP server"""
-    print("Starting MCP SKB Search Server on port 8005...")
+    print("Starting MCP SKB Content Search Server on port 8005...")
     mcp.run(transport="http", port=8005, host="0.0.0.0")
 
 

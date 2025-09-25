@@ -1,4 +1,4 @@
-# MCP SKB Search Server
+# MCP SKB Content Search Server
 
 FastMCP를 사용한 SKB 콘텐츠 검색 MCP 서버입니다.
 
@@ -37,10 +37,10 @@ uv run python main.py
 
 ```bash
 # Docker 이미지 빌드
-docker build -t mcp-skb-search .
+docker build -t mcp-skb-content-search .
 
 # 컨테이너 실행
-docker run -p 8005:8005 mcp-skb-search
+docker run -p 8005:8005 mcp-skb-content-search
 ```
 
 ## 서버 정보
