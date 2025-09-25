@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  mcp-skb-search:
+    build: .
+    ports:
+      - "8005:8005"
+    environment:
+      - PYTHONPATH=/app
+    restart: unless-stopped
