@@ -1,0 +1,22 @@
+[project]
+name = "mcp-upbit"
+version = "0.1.0"
+description = "MCP server for Upbit market data"
+authors = [
+    { name = "Developer", email = "dev@example.com" }
+]
+dependencies = [
+    "fastmcp>=0.2.0",
+    "httpx>=0.25.0"
+]
+requires-python = ">=3.10"
+
+[project.scripts]
+mcp-upbit = "mcp_upbit.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = []
